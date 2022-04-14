@@ -69,14 +69,15 @@
             Grid.ColumnSpan="4"
             Style="{StaticResource DisplayBorder}">
             <Viewbox HorizontalAlignment="Right">
-                <TextBlock Style="{StaticResource DisplayText}" Text="10101010" />
+                <TextBlock Style="{StaticResource DisplayText}" Text="{Binding DisplayText}" />
             </Viewbox>
         </Border>
         
         <Button
             Grid.Row="1"
             Grid.Column="0"
-            Style="{StaticResource ClearButton}">
+            Style="{StaticResource ClearButton}"
+            Command="{Binding ClearEntryCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.ClearEntryAcronym}" />
             </Viewbox>
@@ -85,7 +86,8 @@
         <Button
             Grid.Row="2"
             Grid.Column="0"
-            Style="{StaticResource ClearButton}">
+            Style="{StaticResource ClearButton}"
+            Command="{Binding ClearCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.ClearAcronym}" />
             </Viewbox>
@@ -94,7 +96,8 @@
         <Button
             Grid.Row="1"
             Grid.Column="1"
-            Style="{StaticResource DigitButton}">
+            Style="{StaticResource DigitButton}"
+            Command="{Binding OneCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.OneDigit}" />
             </Viewbox>
@@ -103,7 +106,8 @@
         <Button
             Grid.Row="2"
             Grid.Column="1"
-            Style="{StaticResource DigitButton}">
+            Style="{StaticResource DigitButton}"
+            Command="{Binding ZeroCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.ZeroDigit}" />
             </Viewbox>
@@ -113,7 +117,8 @@
             Grid.Row="1"
             Grid.RowSpan="2"
             Grid.Column="2"
-            Style="{StaticResource SymbolButton}">
+            Style="{StaticResource SymbolButton}"
+            Command="{Binding PlusCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.PlusSign}" />
             </Viewbox>
@@ -122,7 +127,8 @@
         <Button
             Grid.Row="1"
             Grid.Column="3"
-            Style="{StaticResource SymbolButton}">
+            Style="{StaticResource SymbolButton}"
+            Command="{Binding MinusCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.MinusSign}" />
             </Viewbox>
@@ -131,7 +137,8 @@
         <Button
             Grid.Row="2"
             Grid.Column="3"
-            Style="{StaticResource SymbolButton}">
+            Style="{StaticResource SymbolButton}"
+            Command="{Binding EqualCommand}">
             <Viewbox>
                 <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.EqualSign}" />
             </Viewbox>
