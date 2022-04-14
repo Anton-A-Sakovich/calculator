@@ -1,0 +1,140 @@
+﻿<Window x:Class="BinaryCalculator.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BinaryCalculator.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+
+        <Grid.Resources>
+            <Style TargetType="Border" x:Key="DisplayBorder">
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="BorderThickness" Value="4" />
+                <Setter Property="Background" Value="LightGray" />
+                <Setter Property="Padding" Value="4" />
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="DisplayText" >
+                <Setter Property="Padding" Value="0" />
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="ButtonLabel">
+                <Setter Property="Foreground" Value="WhiteSmoke" />
+                <Setter Property="Padding" Value="0" />
+
+                <!-- 
+                    Symbols "+", "-" and "=" are better centered in Courier New. The default font used by WPF
+                    shifts "+" towards the baseline, which looks especially ugly for a enlarged stretched "+".
+                -->
+                <Setter Property="FontFamily" Value="Courier New" />
+                <!-- On the other hand, Courier New is rather thin, so bold weight looks better. -->
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+
+            <Style TargetType="Button" x:Key="ButtonBase">
+                <Setter Property="Margin" Value="16" />
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}" x:Key="ClearButton">
+                <Setter Property="Background" Value="PaleVioletRed" />
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}" x:Key="DigitButton">
+                <Setter Property="Background" Value="Black" />
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}" x:Key="SymbolButton">
+                <Setter Property="Background" Value="LightGray" />
+            </Style>
+
+            <Style TargetType="Viewbox">
+                <Setter Property="Stretch" Value="Uniform" />
+            </Style>
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Border            
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Style="{StaticResource DisplayBorder}">
+            <Viewbox HorizontalAlignment="Right">
+                <TextBlock Style="{StaticResource DisplayText}" Text="10101010" />
+            </Viewbox>
+        </Border>
+        
+        <Button
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource ClearButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.ClearEntryAcronym}" />
+            </Viewbox>
+        </Button>
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="0"
+            Style="{StaticResource ClearButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.ClearAcronym}" />
+            </Viewbox>
+        </Button>
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource DigitButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.OneDigit}" />
+            </Viewbox>
+        </Button>
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="1"
+            Style="{StaticResource DigitButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.ZeroDigit}" />
+            </Viewbox>
+        </Button>
+
+        <Button
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Style="{StaticResource SymbolButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.PlusSign}" />
+            </Viewbox>
+        </Button>
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="3"
+            Style="{StaticResource SymbolButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.MinusSign}" />
+            </Viewbox>
+        </Button>
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="3"
+            Style="{StaticResource SymbolButton}">
+            <Viewbox>
+                <TextBlock Style="{StaticResource ButtonLabel}" Text="{x:Static local:Strings.EqualSign}" />
+            </Viewbox>
+        </Button>
+    </Grid>
+</Window>
