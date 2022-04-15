@@ -1,46 +1,56 @@
 ﻿namespace BinaryCalculator.StateMachine
 {
-    internal class SecondOperandState<T> : ICalculatorState<T>
+    internal class SecondOperandState<TNumber, TDigit> : ICalculatorState<TNumber, TDigit>
+        where TNumber : struct
     {
-        private readonly T _firstOperand;
-        private readonly T _secondOperand;
-        private readonly IBinaryOperator<T> _binaryOperator;
+        private readonly INumberBuilder<TNumber, TDigit> _numberBuilder;
 
-        public SecondOperandState(T firstOperand, T secondOperand, IBinaryOperator<T> binaryOperator)
+        private readonly TNumber _firstOperand;
+        private readonly IBinaryOperator<TNumber> _binaryOperator;
+
+        public SecondOperandState(INumberBuilder<TNumber, TDigit> numberBuilder, TNumber firstOperand, IBinaryOperator<TNumber> binaryOperator)
         {
+            _numberBuilder = numberBuilder;
+
             _firstOperand = firstOperand;
-            _secondOperand = secondOperand;
             _binaryOperator = binaryOperator;
         }
 
-        public T CurrentValue => _secondOperand;
-
-        public ICalculatorState<T> Clear()
+        public ICalculatorState<TNumber, TDigit> Clear(ref TNumber displayedValue)
         {
-            return new FirstOperandState<T>(default!);
+            displayedValue = default!;
+            return new FirstOperandState<TNumber, TDigit>(_numberBuilder);
         }
 
-        public ICalculatorState<T> ClearEntry()
+        public ICalculatorState<TNumber, TDigit> ClearEntry(ref TNumber displayedValue)
         {
-            return new OperatorState<T>(_firstOperand, _binaryOperator);
+            displayedValue = default!;
+            return this;
         }
 
-        public ICalculatorState<T> EnterValue(T value)
+        public ICalculatorState<TNumber, TDigit> EnterDigit(ref TNumber displayedValue, TDigit digit)
         {
-            return new SecondOperandState<T>(_firstOperand, value, _binaryOperator);
+            displayedValue = _numberBuilder.AppendDigit(displayedValue, digit);
+            return this;
         }
 
-        public ICalculatorState<T> Evaluate()
+        public ICalculatorState<TNumber, TDigit> EnterOperator(ref TNumber displayedValue, IBinaryOperator<TNumber> binaryOperator)
         {
-            var lastOperation = _binaryOperator.CaptureSecondOperand(_secondOperand);
+            var secondOperand = displayedValue;
+            var result = _binaryOperator.CaptureSecondOperand(secondOperand).Invoke(_firstOperand);
+
+            displayedValue = result;
+            return new OperatorState<TNumber, TDigit>(_numberBuilder, result, binaryOperator);
+        }
+
+        public ICalculatorState<TNumber, TDigit> Evaluate(ref TNumber displayedValue)
+        {
+            var secondOperand = displayedValue;
+            var lastOperation = _binaryOperator.CaptureSecondOperand(secondOperand);
             var result = lastOperation.Invoke(_firstOperand);
-            return new ResultState<T>(result, lastOperation);
-        }
 
-        public ICalculatorState<T> EnterOperator(IBinaryOperator<T> binaryOperator)
-        {
-            var result = _binaryOperator.CaptureSecondOperand(_secondOperand).Invoke(_firstOperand);
-            return new SecondOperandState<T>(result, default!, binaryOperator);
+            displayedValue = result;
+            return new ResultState<TNumber, TDigit>(_numberBuilder, lastOperation);
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿namespace BinaryCalculator.StateMachine
 {
-    internal interface ICalculatorState<T>
+    internal interface ICalculatorState<TNumber, TDigit>
+        where TNumber : struct
     {
-        T CurrentValue { get; }
+        ICalculatorState<TNumber, TDigit> Clear(ref TNumber displayedValue);
 
-        ICalculatorState<T> Clear();
+        ICalculatorState<TNumber, TDigit> ClearEntry(ref TNumber displayedValue);
 
-        ICalculatorState<T> ClearEntry();
+        ICalculatorState<TNumber, TDigit> EnterDigit(ref TNumber displayedValue, TDigit digit);
 
-        ICalculatorState<T> Evaluate();
+        ICalculatorState<TNumber, TDigit> EnterOperator(ref TNumber displayedValue, IBinaryOperator<TNumber> binaryOperator);
 
-        ICalculatorState<T> EnterValue(T value);
-
-        ICalculatorState<T> EnterOperator(IBinaryOperator<T> binaryOperator);
+        ICalculatorState<TNumber, TDigit> Evaluate(ref TNumber displayedValue);
     }
 }

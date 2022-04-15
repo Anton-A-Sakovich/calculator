@@ -2,42 +2,44 @@
 
 namespace BinaryCalculator.StateMachine
 {
-    internal class ResultState<T> : ICalculatorState<T>
+    internal class ResultState<TNumber, TDigit> : ICalculatorState<TNumber, TDigit>
+        where TNumber : struct
     {
-        private readonly T _result;
-        private readonly Func<T, T> _lastOperation;
+        private readonly INumberBuilder<TNumber, TDigit> _numberBuilder;
+        private readonly Func<TNumber, TNumber> _lastOperation;
 
-        public ResultState(T result, Func<T, T> lastOperation)
+        public ResultState(INumberBuilder<TNumber, TDigit> numberBuilder, Func<TNumber, TNumber> lastOperation)
         {
-            _result = result;
+            _numberBuilder = numberBuilder;
             _lastOperation = lastOperation;
         }
 
-        public T CurrentValue => _result;
-
-        public ICalculatorState<T> Clear()
+        public ICalculatorState<TNumber, TDigit> Clear(ref TNumber displayedValue)
         {
-            return new FirstOperandState<T>(default!);
+            displayedValue = default!;
+            return new FirstOperandState<TNumber, TDigit>(_numberBuilder);
         }
 
-        public ICalculatorState<T> ClearEntry()
+        public ICalculatorState<TNumber, TDigit> ClearEntry(ref TNumber displayedValue)
         {
-            return new FirstOperandState<T>(default!);
+            return Clear(ref displayedValue);
         }
 
-        public ICalculatorState<T> EnterValue(T value)
+        public ICalculatorState<TNumber, TDigit> EnterDigit(ref TNumber displayedValue, TDigit digit)
         {
-            return new FirstOperandState<T>(value);
+            displayedValue = _numberBuilder.ToNumber(digit);
+            return new FirstOperandState<TNumber, TDigit>(_numberBuilder);
         }
 
-        public ICalculatorState<T> Evaluate()
+        public ICalculatorState<TNumber, TDigit> EnterOperator(ref TNumber displayedValue, IBinaryOperator<TNumber> binaryOperator)
         {
-            return new ResultState<T>(_lastOperation.Invoke(_result), _lastOperation);
+            return new OperatorState<TNumber, TDigit>(_numberBuilder, displayedValue, binaryOperator);
         }
 
-        public ICalculatorState<T> EnterOperator(IBinaryOperator<T> binaryOperator)
+        public ICalculatorState<TNumber, TDigit> Evaluate(ref TNumber displayedValue)
         {
-            return new OperatorState<T>(_result, binaryOperator);
+            displayedValue = _lastOperation.Invoke(displayedValue);
+            return new ResultState<TNumber, TDigit>(_numberBuilder, _lastOperation);
         }
     }
 }

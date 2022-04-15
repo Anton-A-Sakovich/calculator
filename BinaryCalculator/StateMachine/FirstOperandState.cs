@@ -1,39 +1,40 @@
 ﻿namespace BinaryCalculator.StateMachine
 {
-    internal class FirstOperandState<T> : ICalculatorState<T>
+    internal class FirstOperandState<TNumber, TDigit> : ICalculatorState<TNumber, TDigit>
+        where TNumber : struct
     {
-        private readonly T _operand;
+        private readonly INumberBuilder<TNumber, TDigit> _numberBuilder;
 
-        public FirstOperandState(T operand)
+        public FirstOperandState(INumberBuilder<TNumber, TDigit> numberBuilder)
         {
-            _operand = operand;
+            _numberBuilder = numberBuilder;
         }
 
-        public T CurrentValue => _operand;
-
-        public ICalculatorState<T> Clear()
+        public ICalculatorState<TNumber, TDigit> Clear(ref TNumber displayedValue)
         {
-            return new FirstOperandState<T>(default!);
+            displayedValue = default!;
+            return this;
         }
 
-        public ICalculatorState<T> ClearEntry()
+        public ICalculatorState<TNumber, TDigit> ClearEntry(ref TNumber displayedValue)
         {
-            return new FirstOperandState<T>(default!);
+            return Clear(ref displayedValue);
         }
 
-        public ICalculatorState<T> EnterValue(T value)
+        public ICalculatorState<TNumber, TDigit> EnterDigit(ref TNumber displayedValue, TDigit digit)
         {
-            return new FirstOperandState<T>(value);
+            displayedValue = _numberBuilder.AppendDigit(displayedValue, digit);
+            return this;
         }
 
-        public ICalculatorState<T> Evaluate()
+        public ICalculatorState<TNumber, TDigit> EnterOperator(ref TNumber displayedValue, IBinaryOperator<TNumber> binaryOperator)
         {
-            return new ResultState<T>(_operand, value => value);
+            return new OperatorState<TNumber, TDigit>(_numberBuilder, displayedValue, binaryOperator);
         }
 
-        public ICalculatorState<T> EnterOperator(IBinaryOperator<T> binaryOperator)
+        public ICalculatorState<TNumber, TDigit> Evaluate(ref TNumber displayedValue)
         {
-            return new OperatorState<T>(_operand, binaryOperator);
+            return this;
         }
     }
 }
