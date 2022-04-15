@@ -9,6 +9,8 @@
     <Grid>
 
         <Grid.Resources>
+            <local:BaseFormValueConverter x:Key="baseFormValueConverter" />
+
             <Style TargetType="Border" x:Key="DisplayBorder">
                 <Setter Property="BorderBrush" Value="Black" />
                 <Setter Property="BorderThickness" Value="4" />
@@ -69,7 +71,7 @@
             Grid.ColumnSpan="4"
             Style="{StaticResource DisplayBorder}">
             <Viewbox HorizontalAlignment="Right">
-                <TextBlock Style="{StaticResource DisplayText}" Text="{Binding DisplayedValue}" />
+                <TextBlock Style="{StaticResource DisplayText}" Text="{Binding Path=DisplayedValue, Converter={StaticResource baseFormValueConverter}}" />
             </Viewbox>
         </Border>
         
