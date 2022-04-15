@@ -6,10 +6,15 @@ namespace BinaryCalculator.Wpf
 {
     internal class MainViewModel : ObservableObject
     {
-        private string _displayText = "0";
+        private readonly IBinaryCalculator _binaryCalculator;
 
-        public MainViewModel()
+        private int _displayedValue;
+
+        public MainViewModel(IBinaryCalculator binaryCalculator)
         {
+            _binaryCalculator = binaryCalculator;
+            _displayedValue = _binaryCalculator.DisplayedValue;
+
             ClearCommand = new RelayCommand(OnClear);
             ClearEntryCommand = new RelayCommand(OnClearEntry);
             OneCommand = new RelayCommand(OnOne);
@@ -19,10 +24,10 @@ namespace BinaryCalculator.Wpf
             EqualCommand = new RelayCommand(OnEqual);
         }
 
-        public string DisplayText
+        public int DisplayedValue
         {
-            get => _displayText;
-            set => SetProperty(ref _displayText, value);
+            get => _displayedValue;
+            set => SetProperty(ref _displayedValue, value);
         }
 
         public ICommand ClearCommand { get; }
@@ -35,37 +40,44 @@ namespace BinaryCalculator.Wpf
 
         private void OnClear()
         {
-
+            _binaryCalculator.Clear();
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
 
         private void OnClearEntry()
         {
-
+            _binaryCalculator.ClearEntry();
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
 
         private void OnOne()
         {
-
+            _binaryCalculator.EnterDigit(true);
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
 
         private void OnZero()
         {
-
+            _binaryCalculator.EnterDigit(false);
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
 
         private void OnPlus()
         {
-
+            _binaryCalculator.EnterOperator(OperatorType.Add);
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
 
         private void OnMinus()
         {
-
+            _binaryCalculator.EnterOperator(OperatorType.Subtract);
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
 
         private void OnEqual()
         {
-
+            _binaryCalculator.Evaluate();
+            DisplayedValue = _binaryCalculator.DisplayedValue;
         }
     }
 }

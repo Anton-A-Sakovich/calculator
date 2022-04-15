@@ -69,7 +69,7 @@
             Grid.ColumnSpan="4"
             Style="{StaticResource DisplayBorder}">
             <Viewbox HorizontalAlignment="Right">
-                <TextBlock Style="{StaticResource DisplayText}" Text="{Binding DisplayText}" />
+                <TextBlock Style="{StaticResource DisplayText}" Text="{Binding DisplayedValue}" />
             </Viewbox>
         </Border>
         
