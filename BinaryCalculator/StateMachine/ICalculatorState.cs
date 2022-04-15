@@ -1,17 +1,17 @@
 ﻿namespace BinaryCalculator.StateMachine
 {
-    internal interface ICalculatorState<TNumber, TDigit>
+    internal interface ICalculatorState<T>
     {
-        TNumber FirstOperand { get; }
+        T CurrentValue { get; }
 
-        ICalculatorState<TNumber, TDigit> StartBinaryOperation(IBinaryOperation<TNumber> operation);
+        ICalculatorState<T> Clear();
 
-        ICalculatorState<TNumber, TDigit> EnterDigit(TDigit digit);
+        ICalculatorState<T> ClearEntry();
 
-        ICalculatorState<TNumber, TDigit> Clear();
+        ICalculatorState<T> Evaluate();
 
-        ICalculatorState<TNumber, TDigit> ClearEntry();
+        ICalculatorState<T> EnterValue(T value);
 
-        ICalculatorState<TNumber, TDigit> Evaluate();
+        ICalculatorState<T> EnterOperator(IBinaryOperator<T> binaryOperator);
     }
 }
