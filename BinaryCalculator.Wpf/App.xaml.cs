@@ -22,6 +22,7 @@ namespace BinaryCalculator.Wpf
         {
             var services = new ServiceCollection();
 
+            services.AddBinaryCalculator();
             services.AddTransient<MainViewModel>();
 
             return services.BuildServiceProvider();
