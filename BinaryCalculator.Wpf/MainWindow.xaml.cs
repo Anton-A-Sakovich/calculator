@@ -46,7 +46,7 @@ namespace BinaryCalculator.Wpf
                     break;
             }
 
-            base.OnKeyUp(e);
+            base.OnKeyDown(e);
         }
     }
 }
