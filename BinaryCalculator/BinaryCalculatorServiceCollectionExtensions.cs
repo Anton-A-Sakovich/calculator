@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBinaryCalculator(this IServiceCollection services)
         {
-            services.AddTransient<IBinaryCalculator, BinaryCalculator.BinaryCalculator>();
+            services.AddTransient<IBinaryCalculator>(serviceProvider => new BinaryCalculator.BinaryCalculator(new Int32BinaryBuilder(), new AddOperator(), new SubtractOperator()));
             return services;
         }
     }

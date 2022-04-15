@@ -5,12 +5,21 @@ namespace BinaryCalculator
 {
     internal class BinaryCalculator : IBinaryCalculator
     {
-        private readonly IBinaryOperator<int> _addOperator = new AddOperator();
-        private readonly IBinaryOperator<int> _subtractOperator = new SubtractOperator();
+        private readonly IBinaryOperator<int> _addOperator;
+        private readonly IBinaryOperator<int> _subtractOperator;
 
-        private int _displayedValue = 0;
-        private ICalculatorState<int, bool> _calculatorState = new FirstOperandState<int, bool>(new Int32BinaryBuilder());
+        private int _displayedValue;
+        private ICalculatorState<int, bool> _calculatorState;
 
+        public BinaryCalculator(INumberBuilder<int, bool> numberBuilder, IBinaryOperator<int> addOperator, IBinaryOperator<int> subtractOperator)
+        {
+            _addOperator = addOperator;
+            _subtractOperator = subtractOperator;
+
+            _displayedValue = 0;
+            _calculatorState = new FirstOperandState<int, bool>(numberBuilder);
+        }
+        
         public int DisplayedValue => _displayedValue;
 
         public void Clear()
