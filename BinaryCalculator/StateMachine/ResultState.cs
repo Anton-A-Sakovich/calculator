@@ -22,13 +22,14 @@ namespace BinaryCalculator.StateMachine
 
         public ICalculatorState<TNumber, TDigit> ClearEntry(ref TNumber displayedValue)
         {
-            return Clear(ref displayedValue);
+            displayedValue = default!;
+            return this;
         }
 
         public ICalculatorState<TNumber, TDigit> EnterDigit(ref TNumber displayedValue, TDigit digit)
         {
             displayedValue = _numberBuilder.ToNumber(digit);
-            return new FirstOperandState<TNumber, TDigit>(_numberBuilder);
+            return this;
         }
 
         public ICalculatorState<TNumber, TDigit> EnterOperator(ref TNumber displayedValue, IBinaryOperator<TNumber> binaryOperator)
@@ -39,7 +40,7 @@ namespace BinaryCalculator.StateMachine
         public ICalculatorState<TNumber, TDigit> Evaluate(ref TNumber displayedValue)
         {
             displayedValue = _lastOperation.Invoke(displayedValue);
-            return new ResultState<TNumber, TDigit>(_numberBuilder, _lastOperation);
+            return this;
         }
     }
 }

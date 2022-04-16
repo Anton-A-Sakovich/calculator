@@ -25,7 +25,7 @@
         public ICalculatorState<TNumber, TDigit> ClearEntry(ref TNumber displayedValue)
         {
             displayedValue = default!;
-            return this;
+            return new SecondOperandState<TNumber, TDigit>(_numberBuilder, _firstOperand, _binaryOperator);
         }
 
         public ICalculatorState<TNumber, TDigit> EnterDigit(ref TNumber displayedValue, TDigit digit)
