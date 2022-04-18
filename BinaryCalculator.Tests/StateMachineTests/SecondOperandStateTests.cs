@@ -22,11 +22,8 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [SetUp]
         public void Setup()
         {
-            _mockNumberBuilder = new Mock<INumberBuilder<int, int>>();
-            _mockNumberBuilder.Setup(builder => builder.AppendDigit(_initialSecondOperand, _digit)).Returns(_updatedSecondOperand);
-
-            _mockBinaryOperator = new Mock<IBinaryOperator<int>>();
-            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialSecondOperand)).Returns(x => x + _initialSecondOperand);
+            _mockNumberBuilder = new Mock<INumberBuilder<int, int>>(MockBehavior.Strict);
+            _mockBinaryOperator = new Mock<IBinaryOperator<int>>(MockBehavior.Strict);
 
             _before = new CalculatorStateAndValue<SecondOperandState<int, int>>
             {
@@ -52,28 +49,34 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void EnterDigit()
         {
+            _mockNumberBuilder.Setup(builder => builder.AppendDigit(_initialSecondOperand, _digit)).Returns(_updatedSecondOperand);
+
             _after = _before.EnterDigit(_digit);
             _after.Assert(_updatedSecondOperand, _before.State);
 
-            _mockNumberBuilder.Verify(builder => builder.AppendDigit(_initialSecondOperand, _digit));
+            _mockNumberBuilder.VerifyAll();
         }
 
         [Test]
         public void EnterOperator()
         {
+            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialSecondOperand)).Returns(x => x + _initialSecondOperand);
+
             _after = _before.EnterOperator(new StubSubtractOperator());
             _after.Assert<OperatorState<int, int>>(_evaluatedValue);
 
-            _mockBinaryOperator.Verify(op => op.CaptureSecondOperand(_initialSecondOperand));
+            _mockBinaryOperator.VerifyAll();
         }
 
         [Test]
         public void Evaluate()
         {
+            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialSecondOperand)).Returns(x => x + _initialSecondOperand);
+
             _after = _before.Evaluate();
             _after.Assert<ResultState<int, int>>(_evaluatedValue);
 
-            _mockBinaryOperator.Verify(op => op.CaptureSecondOperand(_initialSecondOperand));
+            _mockBinaryOperator.VerifyAll();
         }
     }
 }

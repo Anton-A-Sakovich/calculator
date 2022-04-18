@@ -20,8 +20,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [SetUp]
         public void Setup()
         {
-            _mockNumberBuilder = new Mock<INumberBuilder<int, int>>();
-            _mockNumberBuilder.Setup(builder => builder.ToNumber(_digit)).Returns(_digit);
+            _mockNumberBuilder = new Mock<INumberBuilder<int, int>>(MockBehavior.Strict);
 
             _before = new CalculatorStateAndValue<ResultState<int, int>>
             {
@@ -47,8 +46,12 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void EnterDigit()
         {
+            _mockNumberBuilder.Setup(builder => builder.ToNumber(_digit)).Returns(_digit);
+
             _after = _before.EnterDigit(_digit);
             _after.Assert(_digit, _before.State);
+
+            _mockNumberBuilder.VerifyAll();
         }
 
         [Test]

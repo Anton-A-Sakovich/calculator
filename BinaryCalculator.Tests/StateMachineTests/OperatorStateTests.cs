@@ -21,11 +21,8 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [SetUp]
         public void Setup()
         {
-            _mockNumberBuilder = new Mock<INumberBuilder<int, int>>();
-            _mockNumberBuilder.Setup(builder => builder.ToNumber(_digit)).Returns(_digit);
-
-            _mockBinaryOperator = new Mock<IBinaryOperator<int>>();
-            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_firstOperand)).Returns(x => x + _firstOperand);
+            _mockNumberBuilder = new Mock<INumberBuilder<int, int>>(MockBehavior.Strict);
+            _mockBinaryOperator = new Mock<IBinaryOperator<int>>(MockBehavior.Strict);
 
             _before = new CalculatorStateAndValue<OperatorState<int, int>>
             {
@@ -51,10 +48,12 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void EnterDigit()
         {
+            _mockNumberBuilder.Setup(builder => builder.ToNumber(_digit)).Returns(_digit);
+
             _after = _before.EnterDigit(_digit);
             _after.Assert<SecondOperandState<int, int>>(_digit);
 
-            _mockNumberBuilder.Verify(builder => builder.ToNumber(_digit));
+            _mockNumberBuilder.VerifyAll();
         }
 
         [Test]
@@ -68,10 +67,12 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void Evaluate()
         {
+            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_firstOperand)).Returns(x => x + _firstOperand);
+
             _after = _before.Evaluate();
             _after.Assert<ResultState<int, int>>(_evaluatedValue);
 
-            _mockBinaryOperator.Verify(op => op.CaptureSecondOperand(_firstOperand));
+            _mockBinaryOperator.VerifyAll();
         }
     }
 }
