@@ -9,7 +9,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
     {
         private const int _initialValue = 1;
         private const int _digit = 2;
-        private const int _updatedValue = 12;
+        private const int _updatedValue = _initialValue * 10 + _digit;
 
         private Mock<INumberBuilder<int, int>> _mockNumberBuilder = null!;
 

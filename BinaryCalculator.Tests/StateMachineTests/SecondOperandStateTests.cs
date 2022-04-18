@@ -8,10 +8,10 @@ namespace BinaryCalculator.Tests.StateMachineTests
     public class SecondOperandStateTests
     {
         private const int _firstOperand = 1;
-        private const int _initialSecondOperand = 2;
+        private const int _initialValue = 2;
         private const int _digit = 4;
-        private const int _updatedSecondOperand = 24;
-        private const int _evaluatedValue = 3;
+        private const int _updatedValue = _initialValue * 10 + _digit;
+        private const int _evaluatedValue = _firstOperand + _initialValue;
 
         private Mock<IBinaryOperator<int>> _mockBinaryOperator = null!;
         private Mock<INumberBuilder<int, int>> _mockNumberBuilder = null!;
@@ -28,7 +28,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
             _before = new CalculatorStateAndValue<SecondOperandState<int, int>>
             {
                 State = new SecondOperandState<int, int>(_mockNumberBuilder.Object, _firstOperand, _mockBinaryOperator.Object),
-                Value = _initialSecondOperand,
+                Value = _initialValue,
             };
         }
 
@@ -49,10 +49,10 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void EnterDigit()
         {
-            _mockNumberBuilder.Setup(builder => builder.AppendDigit(_initialSecondOperand, _digit)).Returns(_updatedSecondOperand);
+            _mockNumberBuilder.Setup(builder => builder.AppendDigit(_initialValue, _digit)).Returns(_updatedValue);
 
             _after = _before.EnterDigit(_digit);
-            _after.Assert(_updatedSecondOperand, _before.State);
+            _after.Assert(_updatedValue, _before.State);
 
             _mockNumberBuilder.VerifyAll();
         }
@@ -60,7 +60,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void EnterOperator()
         {
-            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialSecondOperand)).Returns(x => x + _initialSecondOperand);
+            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialValue)).Returns(x => x + _initialValue);
 
             _after = _before.EnterOperator(new StubSubtractOperator());
             _after.Assert<OperatorState<int, int>>(_evaluatedValue);
@@ -71,7 +71,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
         [Test]
         public void Evaluate()
         {
-            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialSecondOperand)).Returns(x => x + _initialSecondOperand);
+            _mockBinaryOperator.Setup(op => op.CaptureSecondOperand(_initialValue)).Returns(x => x + _initialValue);
 
             _after = _before.Evaluate();
             _after.Assert<ResultState<int, int>>(_evaluatedValue);

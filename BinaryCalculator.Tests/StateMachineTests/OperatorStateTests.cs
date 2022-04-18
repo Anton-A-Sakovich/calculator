@@ -8,9 +8,9 @@ namespace BinaryCalculator.Tests.StateMachineTests
     public class OperatorStateTests
     {
         private const int _firstOperand = 1;
-        private const int _initialSecondOperand = _firstOperand;
+        private const int _initialValue = _firstOperand;
         private const int _digit = 3;
-        private const int _evaluatedValue = 2; // 1 + 1
+        private const int _evaluatedValue = _firstOperand + _firstOperand;
 
         private Mock<IBinaryOperator<int>> _mockBinaryOperator = null!;
         private Mock<INumberBuilder<int, int>> _mockNumberBuilder = null!;
@@ -27,7 +27,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
             _before = new CalculatorStateAndValue<OperatorState<int, int>>
             {
                 State = new OperatorState<int, int>(_mockNumberBuilder.Object, _firstOperand, _mockBinaryOperator.Object),
-                Value = _initialSecondOperand,
+                Value = _initialValue,
             };
         }
 

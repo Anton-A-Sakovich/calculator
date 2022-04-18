@@ -8,7 +8,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
     [TestFixture]
     public class ResultStateTests
     {
-        private const int _initialResult = 3;
+        private const int _initialValue = 3;
         private const int _digit = 4;
         private readonly Func<int, int> _lastOperation = x => x + 2;
 
@@ -25,7 +25,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
             _before = new CalculatorStateAndValue<ResultState<int, int>>
             {
                 State = new ResultState<int, int>(_mockNumberBuilder.Object, _lastOperation),
-                Value = _initialResult,
+                Value = _initialValue,
             };
         }
 
@@ -65,7 +65,7 @@ namespace BinaryCalculator.Tests.StateMachineTests
         public void Evaluate()
         {
             _after = _before.Evaluate();
-            _after.Assert(_lastOperation.Invoke(_initialResult), _before.State);
+            _after.Assert(_lastOperation.Invoke(_initialValue), _before.State);
         }
     }
 }
